@@ -18,12 +18,12 @@ jobs:
           - target: x86_64-linux
             os: ubuntu-latest
             ext: tar.gz
-          - target: x86_64-linux
-            os: ubuntu-latest
-            ext: rpm
-          - target: x86_64-linux
-            os: ubuntu-latest
-            ext: deb
+            #- target: x86_64-linux
+            #  os: ubuntu-latest
+            #  ext: rpm
+            #- target: x86_64-linux
+            #  os: ubuntu-latest
+            #  ext: deb
 
     steps:
     - uses: actions/checkout@v2
