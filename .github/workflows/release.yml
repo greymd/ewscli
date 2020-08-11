@@ -46,7 +46,8 @@ jobs:
     - name: Taraball
       run: |
         _TAR="ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}"
-        cp -rf "$PWD/build/image" "$PWD/package/lib"
+        mkdir -p "$PWD/package/lib"
+        cp -rf "$PWD/build/image" "$PWD/package/lib/ewscli"
         tar zcvf "$_TAR" -C "$PWD/package" bin lib
 
     - name: Upload binaries to release
