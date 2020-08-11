@@ -1,0 +1,5 @@
+#!/bin/sh
+readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+_keytool="${THIS_DIR}/../lib/ewscli/lib/bin/keytool"
+$_keytool --version
+# openssl s_client -connect exchange.amazon.com:443 -showcerts < /dev/null 2>&1 | sed -n '/BEGIN/,$p;/END/q' > tmp.crt
