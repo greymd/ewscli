@@ -32,5 +32,5 @@ jar {
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-    modules = ['java.xml']
+    modules = ['java.xml', 'java.naming']
 }
