@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    name: Upload Release Assets
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-darwin
+            os: macOS-latest
+            ext: tar.gz
+          - target: x86_64-linux
+            os: ubuntu-latest
+            ext: tar.gz
+          - target: x86_64-linux
+            os: ubuntu-latest
+            ext: rpm
+          - target: x86_64-linux
+            os: ubuntu-latest
+            ext: deb
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set envs
+      id: vars
+      run: |
+        echo ::set-output name=ver::${GITHUB_REF/refs\/tags\/v/}
+
+    - name: Set up Java 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11.0.3
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew runtime
+
+    - name: Taraball
+      run: |
+        _TAR="ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}"
+        cp -rf "$PWD/build/image" "$PWD/package/lib"
+        tar zcvf "$_TAR" -C "$PWD/package" bin lib
+
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}
+        asset_name: ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}
+        tag: ${{ github.ref }}
+        overwrite: true
