@@ -11,9 +11,18 @@ This project is a working in progress project.
 $ brew install greymd/tools/ewscli
 ```
 
-## Linux
+## Ubuntu
 
-TBD
+```
+$ wget https://github.com/greymd/ewscli/releases/download/v0.0.5/ewscli-0.0.5-x86_64-linux.deb
+$ sudo dpkg -i ewscli-*
+```
+
+## RHEL / CentOS
+
+```
+$ sudo yum install https://github.com/greymd/ewscli/releases/download/v0.0.5/ewscli-0.0.5-x86_64-linux.rpm
+```
 
 # Getting started
 
