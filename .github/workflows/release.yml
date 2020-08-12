@@ -18,12 +18,12 @@ jobs:
           - target: x86_64-linux
             os: ubuntu-latest
             ext: tar.gz
-            #- target: x86_64-linux
-            #  os: ubuntu-latest
-            #  ext: rpm
-            #- target: x86_64-linux
-            #  os: ubuntu-latest
-            #  ext: deb
+          - target: x86_64-linux
+            os: ubuntu-latest
+            ext: rpm
+          - target: x86_64-linux
+            os: ubuntu-latest
+            ext: deb
 
     steps:
     - uses: actions/checkout@v2
@@ -45,10 +45,24 @@ jobs:
 
     - name: Taraball
       run: |
-        _TAR="ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}"
-        mkdir -p "$PWD/package/lib"
-        cp -rf "$PWD/build/image" "$PWD/package/lib/ewscli"
-        tar zcvf "$_TAR" -C "$PWD/package" bin lib
+        _TAR="ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.tar.gz"
+        mkdir -p "$PWD/package/unix/lib"
+        cp -rf "$PWD/build/image" "$PWD/package/unix/lib/ewscli"
+        tar zcvf "$_TAR" -C "$PWD/package/unix" bin lib .tar2package.yml
+
+    - name: Build rpm
+      id: rpm
+      if: matrix.ext == 'rpm'
+      run: |
+        _TAR=ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.tar.gz
+        docker run -i "greymd/tar2rpm:1.0.1" < "$_TAR" > ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.rpm
+
+    - name: Build deb
+      id: deb
+      if: matrix.ext == 'deb'
+      run: |
+        _TAR=ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.tar.gz
+        docker run -i "greymd/tar2deb:1.0.1" < "$_TAR" > ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.deb
 
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v1-release
