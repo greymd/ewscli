@@ -5,9 +5,15 @@ This project is a working in progress project.
 
 # Install
 
+## macOS
+
 ```
 $ brew install greymd/tools/ewscli
 ```
+
+## Linux
+
+TBD
 
 # Getting started
 
