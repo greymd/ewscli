@@ -1,5 +1,11 @@
 #!/bin/sh
+set -eu
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-_keytool="${THIS_DIR}/../lib/ewscli/lib/bin/keytool"
-$_keytool --version
-# openssl s_client -connect exchange.amazon.com:443 -showcerts < /dev/null 2>&1 | sed -n '/BEGIN/,$p;/END/q' > tmp.crt
+readonly _keytool="${THIS_DIR}/../lib/ewscli/bin/keytool"
+readonly _keystore="${THIS_DIR}/../lib/ewscli/lib/security/cacerts"
+_url="${1#http*:\/\/}"
+_url="${_url%/}"
+# $_keytool --version
+openssl s_client -connect "$_url":443 -showcerts < /dev/null 2>&1 | sed -n '/BEGIN/,$p;/END/q' > /tmp/ewscli.crt
+echo yes | "$_keytool" -importcert -trustcacerts -alias ews -keystore "$_keystore" -file "/tmp/ewscli.crt" -storepass changeit
+rm -f "/tmp/ewscli.crt"
