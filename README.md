@@ -23,4 +23,18 @@ Password:
 Password Again:
 Credential is stored in macOS Keychain
 Configure is stored in /Users/user/.config/ewscli/config
+
+## List folders
+$ ewscli mail describe-folders
+Inbox
+folderA
+folderB
+folderC
+...
+
+## List top mails in Inbox
+$ ewscli mail describe-mails --folder-name Inbox --max 10 | jq .subject
+"Hello1"
+"Test mail"
+...
 ```
