@@ -15,13 +15,12 @@ import java.io.IOException;
 
 @CommandLine.Command(name = "describe-items")
 public class DescribeItemsCommand extends DescribeItemsBase {
-
     @Override
     protected FindItemsResults<Item> getItems(ExchangeService service, String folderName) throws Exception {
         var root = new FolderId(WellKnownFolderName.Root);
         var folderId = new FolderSearchLogic().getDeepestFolderId(service, root, folderName);
         var view = this.getView();
-        return service.findItems(folderId, view);
+        return service.findItems(folderId, query, view);
     }
 
     @Override

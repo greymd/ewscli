@@ -23,6 +23,11 @@ public abstract class DescribeItemsBase implements Runnable {
             "<Received date>, <Subject>, <MailId>")
     private boolean verbose = false;
 
+    @CommandLine.Option(names = "--query",
+            paramLabel = "<QueryString>",
+            description = "i.e, \"Sent:01/01/2001..01/15/2001\".\nSee https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/querystring-querystringtype")
+    protected String query = "";
+
     protected ItemView getView () {
         return new ItemView(max);
     }
