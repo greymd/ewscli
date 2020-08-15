@@ -20,11 +20,16 @@ import java.util.concurrent.TimeUnit;
 @CommandLine.Command(name = "monitor-folders", description = "Monitor new mails.")
 public class MonitorFoldersCommand implements Runnable{
 
-    @CommandLine.Option(names = "--folder-name", paramLabel = "( <FolderName> | '/' )", required = true)
-    String folderName = "";
+    @CommandLine.Option(names = "--folder-name",
+            paramLabel = "<FolderName>",
+            description = "Name of folder to be monitored. Multiple options are allowed.",
+            required = true)
+    String[] folderNames = {""};
 
     @Override public void run() {
         ExchangeService service = null;
+        // Subscribe to pull notifications in the Inbox folder, and get notified when a new mail is received, when an item or folder is created, or when an item or folder is deleted.
+        List folder = new ArrayList();
         try {
             service = AppConfig.getInstance().getService();
         } catch (InvalidConfigException e) {
@@ -32,11 +37,11 @@ public class MonitorFoldersCommand implements Runnable{
             System.exit(1);
         }
         var emailRoot = new FolderId(WellKnownFolderName.MsgFolderRoot);
-        FolderId deepest = new FolderSearchLogic().getDeepestFolderId(service, emailRoot, folderName);
-
-        // Subscribe to pull notifications in the Inbox folder, and get notified when a new mail is received, when an item or folder is created, or when an item or folder is deleted.
-        List folder = new ArrayList();
-        folder.add(deepest);
+        for (String folderName: folderNames) {
+            FolderId deepest = new FolderSearchLogic().getDeepestFolderId(service, emailRoot, folderName);
+            folder.add(deepest);
+            System.err.println("Check existence of " + folderName);
+        }
 
         try {
             PullSubscription subscription = service.subscribeToPullNotifications(folder, 5,null, EventType.NewMail);
