@@ -25,6 +25,10 @@ public class ConfigIOLogic {
         config.setUsername(username);
         config.setPassword(password);
         saveConfig(config);
+        // TODO: Try to access EWS endpoint with simple method
+        // If it does not work, ask user import SSL certificate into local JVM to trust the endpoint or not
+        // Disabling validation and create pem file
+        // Import pem into cacerts
     }
 
     public String getKeyringServiceName (ConfigModel config) {
