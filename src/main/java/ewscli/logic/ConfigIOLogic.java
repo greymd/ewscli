@@ -4,20 +4,25 @@ import ewscli.DefaultParams;
 import ewscli.exception.InvalidConfigException;
 import ewscli.exception.InvalidPasswordException;
 import ewscli.model.ConfigModel;
+import ewscli.util.CertificateImporter;
 import ewscli.util.ConfigFile;
 import ewscli.util.KeyRing;
 
 import java.io.Console;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 
 public class ConfigIOLogic {
-    public void initializeConfig() throws InvalidPasswordException {
+    public void initializeConfig() throws InvalidPasswordException, MalformedURLException, URISyntaxException {
         Console console = System.console();
         if (console == null) {
-            System.err.println("Console is not available.");
+            System.err.println("ewscli: [Error] Console is not available.");
             System.exit(1);
         }
         var domain = showInputPrompt("EWS endpoint (i.e https://example.com/EWS/exchange.asmx)", console, false);
+        var url = new URL(domain);
         var username = showInputPrompt("Username", console, false);
         var password = showInputPrompt("Password", console, true);
         var config = new ConfigModel();
@@ -25,10 +30,25 @@ public class ConfigIOLogic {
         config.setUsername(username);
         config.setPassword(password);
         saveConfig(config);
-        // TODO: Try to access EWS endpoint with simple method
-        // If it does not work, ask user import SSL certificate into local JVM to trust the endpoint or not
+        // Ask user import SSL certificate into local JVM to trust the endpoint or not
+        if (!CertificateImporter.isTrusted(url)) {
+            trustDomain(url);
+        }
+    }
+
+    private void trustDomain(URL url) throws URISyntaxException, InvalidPasswordException {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("ewscli: [Error] Console is not available.");
+            System.exit(1);
+        }
+        var yes_or_no = showInputPrompt(url.getHost() + " is not trusted by ewscli on JVM. Trust it ? [y/n]", console, false);
         // Disabling validation and create pem file
-        // Import pem into cacerts
+        if (yes_or_no.equals("y") || yes_or_no.equals("yes")) {
+            var cert = CertificateImporter.getRootX509Certificate(url);
+            // Import pem into cacerts
+            CertificateImporter.registerCertificateKeytool(cert, "ewscli");
+        }
     }
 
     public String getKeyringServiceName (ConfigModel config) {

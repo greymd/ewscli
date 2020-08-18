@@ -3,6 +3,7 @@ package ewscli.subcommands.base;
 import ewscli.AppConfig;
 import ewscli.exception.InvalidConfigException;
 import microsoft.exchange.webservices.data.core.ExchangeService;
+import microsoft.exchange.webservices.data.core.exception.service.remote.ServiceRequestException;
 import microsoft.exchange.webservices.data.core.service.folder.Folder;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine;
@@ -27,19 +28,24 @@ public abstract class DescribeFoldersBase implements Runnable {
         try {
             service = AppConfig.getInstance().getService();
         } catch (InvalidConfigException e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
             System.exit(1);
         }
-        var results = getChildFolders(service, folderName);
         try {
+            var results = getChildFolders(service, folderName);
             String output;
             for (Folder folder : results) {
                 output = getOutputString(folder, verbose);
                 if(StringUtils.isEmpty(output)) continue;
                 System.out.println(output);
             }
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
+            System.err.println("ewscli: [Error] If error includes SSLHandshakeException, the Exchange endpoint is not trusted.");
+            System.err.println("ewscli: [Error] Run `ewscli configure' again and trust the certificate.");
+            System.exit(1);
+        } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 }

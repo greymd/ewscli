@@ -4,6 +4,7 @@ import ewscli.AppConfig;
 import ewscli.exception.InvalidConfigException;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
+import microsoft.exchange.webservices.data.core.exception.service.remote.ServiceRequestException;
 import microsoft.exchange.webservices.data.core.service.item.Item;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.ItemView;
@@ -55,8 +56,13 @@ public abstract class DescribeItemsBase implements Runnable {
                 if(StringUtils.isEmpty(output)) continue;
                 System.out.println(output);
             }
+        } catch (NullPointerException | ServiceRequestException e) {
+            System.err.println("ewscli: [Error] If error includes SSLHandshakeException, the Exchange endpoint is not trusted.");
+            System.err.println("ewscli: [Error] Run `ewscli configure' again and trust the certificate.");
+            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 }

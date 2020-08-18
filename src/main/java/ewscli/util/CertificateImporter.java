@@ -1,28 +1,37 @@
 package ewscli.util;
 
 import javax.net.ssl.*;
-import java.io.BufferedReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.security.cert.Certificate;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
+import java.util.Scanner;
 
 public class CertificateImporter {
-    public String domainFromURL (String url) throws URISyntaxException {
-        URI uri;
-        uri = new URI(url);
-        return uri.getHost();
+
+    public static boolean isTrusted (URL url) {
+        try {
+            HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
+            con.connect();
+            con.disconnect();
+        } catch (SSLHandshakeException e) {
+            // System.err.println("This certificate for " + url.toString() + " is not trusted by JVM.");
+            return false;
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return true;
     }
 
-    public void importCertificate (String urlString) {
+    public static byte[] getRootX509Certificate(URL url) {
         // Disabling Certificate Validation
-/*
         TrustManager[] trustAllCerts = new TrustManager[] {
                 new X509TrustManager() {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -41,84 +50,73 @@ public class CertificateImporter {
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (GeneralSecurityException e) {
+            // Do nothing
         }
-        */
-
-        URL url;
         try {
-            url = new URL(urlString);
             HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
             con.connect();
-            con.getServerCertificates();
+            Certificate[] certs = con.getServerCertificates();
             con.disconnect();
-            //dumpl all cert info
-            print_https_cert(con);
-            //dump all the content
-            // print_content(con);
-        } catch (SSLHandshakeException e) {
-            System.err.println("Due to untrusted certificate: " + e.getMessage());
-        } catch (IOException e){
+            return certs[0].getEncoded();
+        } catch (IOException | CertificateEncodingException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    private void print_https_cert(HttpsURLConnection con){
+    public static void registerCertificateKeytool (byte[] cert, String alias) {
+        String jvm_root = System.getProperties().getProperty("java.home");;
+        String cacerts_location = jvm_root + File.separator + "lib" + File.separator + "security" + File.separator + "cacerts";
+        String keytool_location;
 
-        if(con!=null){
+        if (System.getProperty("os.name").startsWith("Win")) {
+            keytool_location = jvm_root + File.separator + "bin" + File.separator + "keytool.exe";
+        } else {
+            keytool_location = jvm_root + File.separator + "bin" + File.separator + "keytool";
+        }
+        try {
+            Path tempFilePath  = Files.createTempFile("ewscli-cert", ".pem");
+            File tempFile = tempFilePath.toFile();
+            tempFile.deleteOnExit();
+            OutputStream os = new FileOutputStream(tempFile);
+            os.write(new String("-----BEGIN CERTIFICATE-----\n").getBytes());
+            os.write(new String(Base64.getEncoder().encode(cert)).getBytes());
+            os.write(new String("\n-----END CERTIFICATE-----\n").getBytes());
+            os.close();
 
-            try {
+            // Delete alias in advance
+            ProcessBuilder deleteProcessBuilder = new ProcessBuilder();
+            deleteProcessBuilder.command(keytool_location, "-delete", "-alias", alias, "-keystore", cacerts_location, "-storepass", "changeit");
+            Process deleteProcess = deleteProcessBuilder.start();
+            deleteProcess.waitFor();
 
-                System.out.println("Response Code : " + con.getResponseCode());
-                System.out.println("Cipher Suite : " + con.getCipherSuite());
-                System.out.println("\n");
+            // Register alias
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command(keytool_location, "-importcert", "-trustcacerts", "-alias", alias, "-keystore", cacerts_location, "-file", tempFilePath.toAbsolutePath().toString(), "-storepass", "changeit");
 
-                Certificate[] certs = con.getServerCertificates();
-                for(Certificate cert : certs){
-                    System.out.println("Cert Type : " + cert.getType());
-                    System.out.println("Cert Hash Code : " + cert.hashCode());
-                    System.out.println("Cert Public Key Algorithm : "
-                            + cert.getPublicKey().getAlgorithm());
-                    System.out.println("Cert Public Key Format : "
-                            + cert.getPublicKey().getFormat());
-                    System.out.println("Cert Encoded: "
-                    + new String(Base64.getEncoder().encode(cert.getEncoded())));
-                    System.out.println("\n");
-                }
+            System.err.println("ewscli: execute: " + keytool_location);
+            Process process = processBuilder.start();
 
-            } catch (SSLPeerUnverifiedException e) {
-                e.printStackTrace();
-            } catch (IOException e){
-                e.printStackTrace();
-            } catch (CertificateEncodingException e) {
-                e.printStackTrace();
+            OutputStream stdin = process.getOutputStream();
+            InputStream stdout = process.getInputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stdin));
+            writer.write("y\ny\ny\n");
+            writer.flush();
+            writer.close();
+
+            Scanner scanner = new Scanner(stdout);
+            while (scanner.hasNextLine()) {
+                System.err.println(scanner.nextLine());
+            }
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                System.err.println("ewscli: Certificate is trusted.");
+            } else {
+                System.err.println("ewscli: [Error] Failed to trust certificate.");
             }
 
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
-
-    }
-
-    private void print_content(HttpsURLConnection con){
-        if(con!=null){
-
-            try {
-
-                System.out.println("****** Content of the URL ********");
-                BufferedReader br =
-                        new BufferedReader(
-                                new InputStreamReader(con.getInputStream()));
-
-                String input;
-
-                while ((input = br.readLine()) != null){
-                    System.out.println(input);
-                }
-                br.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
     }
 }

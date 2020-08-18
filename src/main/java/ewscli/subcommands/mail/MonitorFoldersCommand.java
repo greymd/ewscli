@@ -8,6 +8,7 @@ import ewscli.model.EventModel;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.notification.EventType;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
+import microsoft.exchange.webservices.data.core.exception.service.remote.ServiceRequestException;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.notification.*;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
@@ -36,14 +37,14 @@ public class MonitorFoldersCommand implements Runnable{
             System.err.println(e.getMessage());
             System.exit(1);
         }
-        var emailRoot = new FolderId(WellKnownFolderName.MsgFolderRoot);
-        for (String folderName: folderNames) {
-            FolderId deepest = new FolderSearchLogic().getDeepestFolderId(service, emailRoot, folderName);
-            folder.add(deepest);
-            System.err.println("Check existence of " + folderName);
-        }
 
         try {
+            var emailRoot = new FolderId(WellKnownFolderName.MsgFolderRoot);
+            for (String folderName: folderNames) {
+                FolderId deepest = new FolderSearchLogic().getDeepestFolderId(service, emailRoot, folderName);
+                folder.add(deepest);
+                System.err.println("Check existence of " + folderName);
+            }
             PullSubscription subscription = service.subscribeToPullNotifications(folder, 5,null, EventType.NewMail);
             System.err.println("Start polling ...");
 
@@ -61,9 +62,13 @@ public class MonitorFoldersCommand implements Runnable{
                 }
                 TimeUnit.SECONDS.sleep(3);
             }
+        } catch (ServiceRequestException e) {
+            System.err.println("ewscli: [Error] If error includes SSLHandshakeException, the Exchange endpoint is not trusted.");
+            System.err.println("ewscli: [Error] Run `ewscli configure' again and trust the certificate.");
+            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
-
     }
 }
