@@ -7,8 +7,6 @@ import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.security.cert.Certificate;
 import java.net.URL;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
@@ -22,7 +20,6 @@ public class CertificateImporter {
             con.connect();
             con.disconnect();
         } catch (SSLHandshakeException e) {
-            // System.err.println("This certificate for " + url.toString() + " is not trusted by JVM.");
             return false;
         } catch (IOException e){
             e.printStackTrace();

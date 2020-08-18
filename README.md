@@ -27,9 +27,6 @@ $ sudo yum install https://github.com/greymd/ewscli/releases/download/v0.0.5/ews
 # Getting started
 
 ```
-## Import TLS certificate first
-$ sudo ewscli-import-cert exchange.example.com
-
 ## Set endopoint, username and password
 $ ewscli configure
 EWS endpoint (i.e https://example.com/EWS/exchange.asmx): https://exchange.example.com/EWS/exchange.asmx
@@ -40,7 +37,7 @@ Credential is stored in macOS Keychain
 Configure is stored in /Users/user/.config/ewscli/config
 
 ## List folders
-$ ewscli mail describe-folders
+$ ewscli mail describe-folders | jq -r .displayName
 Inbox
 folderA
 folderB

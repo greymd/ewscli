@@ -1,5 +1,6 @@
 package ewscli.subcommands;
 
+import ewscli.exception.InvalidConfigException;
 import ewscli.logic.ConfigIOLogic;
 import ewscli.exception.InvalidPasswordException;
 import picocli.CommandLine;
@@ -11,12 +12,21 @@ import java.net.URISyntaxException;
         description = "Initialize credentials",
         mixinStandardHelpOptions = true)
 public class ConfigureCommand implements Runnable {
+    @CommandLine.Option(names = "--renew-trusted-cert", description = "Import SSL certificate of EWS endpoint into the configure file.")
+    boolean trust = false;
 
     @Override
     public void run() {
         var cpl = new ConfigIOLogic();
         try {
-            cpl.initializeConfig();
+            if (trust) {
+                cpl.renewTrustedCert();
+            } else {
+                cpl.initializeConfig();
+            }
+        } catch (InvalidConfigException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
         } catch (InvalidPasswordException e) {
             System.err.println(e.getMessage());
             System.exit(1);

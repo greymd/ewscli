@@ -36,7 +36,7 @@ public class ConfigIOLogic {
         }
     }
 
-    private void trustDomain(URL url) throws URISyntaxException, InvalidPasswordException {
+    private void trustDomain(URL url) throws InvalidPasswordException {
         Console console = System.console();
         if (console == null) {
             System.err.println("ewscli: [Error] Console is not available.");
@@ -49,6 +49,17 @@ public class ConfigIOLogic {
             // Import pem into cacerts
             CertificateImporter.registerCertificateKeytool(cert, "ewscli");
         }
+    }
+
+    public void renewTrustedCert() throws InvalidConfigException, MalformedURLException, InvalidPasswordException {
+        ConfigModel config = this.getConfig();
+        var url = new URL(config.getDomain());
+        if (!CertificateImporter.isTrusted(url)) {
+            trustDomain(url);
+        } else {
+            System.err.println("ewscli: " + url.getHost() + " is already trusted.");
+        }
+        config = null;
     }
 
     public String getKeyringServiceName (ConfigModel config) {
