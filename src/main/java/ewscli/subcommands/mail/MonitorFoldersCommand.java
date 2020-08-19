@@ -9,6 +9,7 @@ import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.notification.EventType;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.exception.service.remote.ServiceRequestException;
+import microsoft.exchange.webservices.data.core.exception.service.remote.ServiceResponseException;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.notification.*;
 import microsoft.exchange.webservices.data.property.complex.FolderId;
@@ -66,6 +67,9 @@ public class MonitorFoldersCommand implements Runnable{
             System.err.println("ewscli: [Error] If error includes SSLHandshakeException, the Exchange endpoint is not trusted.");
             System.err.println("ewscli: [Error] Run `ewscli configure' again and trust the certificate.");
             System.exit(1);
+        } catch (ServiceResponseException e) {
+            System.err.println("ewscli: [Error] Subscription for monitoring was expired. Run command again.");
+            System.exit(10);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
