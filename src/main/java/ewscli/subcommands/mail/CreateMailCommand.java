@@ -15,7 +15,7 @@ public class CreateMailCommand implements Runnable {
     @CommandLine.Option(names = "--subject", paramLabel = "<Subject>", description = "Mail subject")
     String mailSubject = "";
 
-    @CommandLine.Option(names = "--body", paramLabel = "<Body>", description = "Mail body. HTML may be used.")
+    @CommandLine.Option(names = "--body", paramLabel = "<Body>", description = "Mail body. HTML can be used.")
     String mailBody = "";
 
     @CommandLine.Option(names = "--to", paramLabel = "<address>[,<address2>,...]", description = "Destination e-mail addresses. CSV is acceptable.", required = true)
@@ -27,7 +27,7 @@ public class CreateMailCommand implements Runnable {
     @CommandLine.Option(names = "--bcc", paramLabel = "<address>[,<address2>,...]", description = "Blind carbon copy of e-mail addresses.")
     String mailBcc = "";
 
-    @CommandLine.Option(names = "--draft", description = "Do not send the mail and save it into Drafts folder")
+    @CommandLine.Option(names = "--draft", description = "Do not send the mail, save it into Drafts folder instead.")
     boolean draft = false;
 
     @Override public void run() {
