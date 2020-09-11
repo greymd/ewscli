@@ -28,7 +28,7 @@ $ sudo yum install https://github.com/greymd/ewscli/releases/download/v0.0.6/ews
 
 ```
 ## Set endopoint, username and password
-$ ewscli configure
+$ sudo ewscli configure
 EWS endpoint (i.e https://example.com/EWS/exchange.asmx): https://exchange.example.com/EWS/exchange.asmx
 Username: username
 Password:
