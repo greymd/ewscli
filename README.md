@@ -14,14 +14,14 @@ $ brew install greymd/tools/ewscli
 ## Ubuntu
 
 ```
-$ wget https://github.com/greymd/ewscli/releases/download/v0.0.7/ewscli-0.0.7-x86_64-linux.deb
+$ wget https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli-1.0.0-x86_64-linux.deb
 $ sudo dpkg -i ewscli-*
 ```
 
 ## RHEL / CentOS
 
 ```
-$ sudo yum install https://github.com/greymd/ewscli/releases/download/v0.0.7/ewscli-0.0.7-x86_64-linux.rpm
+$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli-1.0.0-x86_64-linux.rpm
 ```
 
 # Getting started
