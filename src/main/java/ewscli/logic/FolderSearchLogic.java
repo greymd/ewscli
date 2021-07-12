@@ -70,10 +70,10 @@ public class FolderSearchLogic {
         FolderId currentFolderId = rootFolderId;
         chain.add(currentFolderId);
         fullPath = Path.regulatePath(fullPath);
-        if (StringUtils.isEmpty(fullPath) || fullPath.equals(File.separator)) {
+        if (StringUtils.isEmpty(fullPath) || fullPath.equals(Path.SEPARATOR)) {
             return chain;
         }
-        String[] dirs = fullPath.split(File.separator);
+        String[] dirs = fullPath.split(Path.SEPARATOR);
         try {
             for (String dir : dirs) {
                 var filter = new SearchFilter.IsEqualTo(FolderSchema.DisplayName, dir);

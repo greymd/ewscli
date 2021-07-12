@@ -1,0 +1,55 @@
+name: Release for Windows
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    name: Upload Release Assets
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-windows
+            os: windows-latest
+            ext: exe
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set envs
+      id: vars
+      run: |
+        echo ::set-output name=ver::${GITHUB_REF/refs\/tags\/v/}
+      shell: bash
+
+    - name: Set up Java 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11.0.3
+
+    - name: Build with Gradle for Windows
+      shell: pwsh
+      run: |
+        .\gradlew runtime
+        $srcpath = '\build\image\'
+        $dstpath = '\package\windows\'
+        $srcfiles = Get-ChildItem ".$srcpath"
+        foreach ($file in $srcfiles) { Copy-Item $file.FullName -Destination $file.FullName.Replace($srcpath, $dstpath) -Recurse }
+
+    - name: Building the installer
+      shell: cmd
+      run: |
+        "%programfiles(x86)%\Inno Setup 6\iscc.exe" "installer.iss"
+        move Output\ewscli_installer.exe .
+        rename ewscli_installer.exe ewscli_installer-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.exe
+
+    - name: Upload binaries to release for Windows
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ewscli_installer-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}
+        asset_name: ewscli_installer-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.${{ matrix.ext }}
+        tag: ${{ github.ref }}
+        overwrite: true

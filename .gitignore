@@ -12,4 +12,7 @@ out/
 
 package/windows/bin/
 package/windows/lib/
+package/windows/conf/
+package/windows/legal/
+package/windows/release
 Output/

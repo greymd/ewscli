@@ -24,6 +24,10 @@ public class Main implements Runnable {
         spec.commandLine().usage(System.err);
     }
 
+    public static String ping() {
+        return "ping";
+    }
+
     public static void main(String[] args) {
         System.exit(new CommandLine(new Main()).execute(args));
     }

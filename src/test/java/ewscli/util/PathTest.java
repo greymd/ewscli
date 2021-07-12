@@ -20,7 +20,6 @@ public class PathTest {
         assertEquals("A/B/C/D", Path.regulatePath("A/B/C/D/"));
         assertEquals("\uD83C\uDDEE\uD83C\uDDEA/B/C/D", Path.regulatePath("\uD83C\uDDEE\uD83C\uDDEA/B/C/D/", "/"));
         assertEquals("hogehoge/fuga/fuga/aaa", Path.regulatePath("///hogehoge/fuga//fuga/aaa//", "/"));
-
     }
 
     @Test

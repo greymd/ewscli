@@ -2,28 +2,30 @@ package ewscli.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-
 public class Path {
+    // Unfortunately, I couldn't respect MSDOS style file separator due to the inconvenience in the regex.
+    public static String SEPARATOR = "/";
+    // private String DEFAULT_DEPARATOR = File.separator;
     public static String regulatePath (String path) {
-        return regulatePath(path, File.separator);
+        return regulatePath(path, SEPARATOR);
     }
 
     /**
-     * Regulate path name. Remove File.separator if it located at...
+     * Regulate path name. Remove the file separator if it located at...
      * * Prefix top of the path.
      * * Suffix of the path.
      * @param path i.e /A/B/C/D/
      * @return Regulated path i.e A/B/C/D
      */
     public static String regulatePath (String path, String separator) {
-        if (StringUtils.isEmpty(separator)) {
-            separator = File.separator;
+        String sep = separator;
+        if (StringUtils.isEmpty(sep)) {
+            sep = SEPARATOR;
         }
         // Squeeze repeated separators
-        String result = path.replaceAll(separator + "+", separator)
-                .replaceAll("^" + separator , "")
-                .replaceAll(separator + "$", "");
+        String result = path.replaceAll(sep + "+", sep)
+                .replaceAll("^" + sep , "")
+                .replaceAll(sep + "$", "");
         return result;
     }
 }

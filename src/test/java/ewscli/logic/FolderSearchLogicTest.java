@@ -2,6 +2,7 @@ package ewscli.logic;
 
 import ewscli.AppConfig;
 import ewscli.exception.InvalidConfigException;
+import ewscli.util.Path;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.exception.service.local.ServiceLocalException;
 import microsoft.exchange.webservices.data.core.service.folder.Folder;
@@ -19,7 +20,7 @@ public class FolderSearchLogicTest {
     public void findChildFoldersRoot() throws InvalidConfigException {
         var service = AppConfig.getInstance().getService();
         var result = new ArrayList<FolderId>();
-        result = new FolderSearchLogic().getFolderIdChain(service, new FolderId(WellKnownFolderName.MsgFolderRoot), File.separator);
+        result = new FolderSearchLogic().getFolderIdChain(service, new FolderId(WellKnownFolderName.MsgFolderRoot), Path.SEPARATOR);
         assertEquals(1, result.size());
 
         result = new FolderSearchLogic().getFolderIdChain(service, new FolderId(WellKnownFolderName.MsgFolderRoot), "");

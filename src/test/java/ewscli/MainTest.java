@@ -1,9 +1,14 @@
 package ewscli;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class MainTest {
     // Those test are supposed to be executed manually.
     // Do not execute in automated testing.
+    @Test public void mainTestString() {
+        assertEquals("ping", Main.ping());
+    }
     @Test public void mainVersion() {
         Main classUnderTest = new Main();
         classUnderTest.main(new String[]{"--version"});
@@ -23,6 +28,10 @@ public class MainTest {
     @Test public void mainDescribeItems() {
         Main classUnderTest = new Main();
         classUnderTest.main(new String[]{"mail", "describe-mails", "--folder-name", "Inbox", "--max", "10"});
+    }
+    @Test public void mainDescribeItemsInChild() {
+        Main classUnderTest = new Main();
+        classUnderTest.main(new String[]{"mail", "describe-mails", "--folder-name", "Inbox/__ToCC", "--max", "10"});
     }
     @Test public void mainDescribeItemsVerbose() {
         Main classUnderTest = new Main();
