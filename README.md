@@ -1,7 +1,6 @@
 # EWS (Exchange Web Service) CLI
 
-Simple CLI client for Microsoft Exchange Web Service.
-This project is a working in progress project.
+Simple CLI client for Microsoft Exchange Web Service powered by [ews-java-api](https://github.com/OfficeDev/ews-java-api).
 
 # Install
 
@@ -27,6 +26,7 @@ $ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.0/ews
 ## Windows
 
 Install this executable file.
+
 https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli_installer-1.0.0-x86_64-windows.exe
 
 # Getting started
