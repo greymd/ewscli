@@ -10,4 +10,5 @@ build/
 .idea/
 out/
 
-
+package/windows/bin/
+package/windows/lib/
