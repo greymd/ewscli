@@ -1,4 +1,4 @@
-#include "environment.iss"
+#include "installer_environment.iss"
 #define MyAppName "ewscli"
 #define MyAppVersion "0.0.6"
 #define MyAppPublisher "Yasuhiro Yamada"
@@ -31,14 +31,14 @@ ChangesEnvironment=true
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "D:\Users\yasyam\repos\greymd\ewscli\package\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "package\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Tasks]
-Name: envPath; Description: "Add to PATH variable" 
+Name: envPath; Description: "Add to PATH variable"
 
 [Code]
 procedure CurStepChanged(CurStep: TSetupStep);
