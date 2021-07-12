@@ -70,7 +70,7 @@ jobs:
         _TAR=ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.tar.gz
         docker run -i "greymd/tar2deb:1.0.1" < "$_TAR" > ewscli-${{ steps.vars.outputs.ver }}-${{ matrix.target }}.deb
 
-    - name: Build with Gradle
+    - name: Build with Gradle for Windows
       if: matrix.ext == 'exe'
       shell: cmd
       run: |
