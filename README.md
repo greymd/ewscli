@@ -24,6 +24,11 @@ $ sudo dpkg -i ewscli-*
 $ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli-1.0.0-x86_64-linux.rpm
 ```
 
+## Windows
+
+Install this executable file.
+https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli_installer-1.0.0-x86_64-windows.exe
+
 # Getting started
 
 ```
