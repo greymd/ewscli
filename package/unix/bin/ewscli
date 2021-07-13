@@ -1,3 +1,0 @@
-#!/bin/sh
-readonly THIS_DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "${THIS_DIR}"/../lib/ewscli/bin/ewscli ${1+"$@"}
