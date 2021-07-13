@@ -31,11 +31,11 @@ ChangesEnvironment=true
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "package\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "package\windows\*"; DestDir: "{userappdata}\{#MyAppName}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{userappdata}\{#MyAppName}\{#MyAppExeName}"
 
 [Tasks]
 Name: envPath; Description: "Add to PATH variable"
@@ -44,10 +44,10 @@ Name: envPath; Description: "Add to PATH variable"
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
     if (CurStep = ssPostInstall) and IsTaskSelected('envPath')
-    then EnvAddPath(ExpandConstant('{app}') +'\exe');
+    then EnvAddPath(ExpandConstant('{userappdata}') + '\' + '{#MyAppName}' +'\exe');
 end;
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
     if CurUninstallStep = usPostUninstall
-    then EnvRemovePath(ExpandConstant('{app}') +'\exe');
+    then EnvRemovePath(ExpandConstant('{userappdata}') + '\' + '{#MyAppName}' +'\exe');
 end;
