@@ -2,8 +2,8 @@ name : ewscli
 cmdname : ewscli
 summary : EWS (Exchange Web Service) CLI
 description : EWS (Exchange Web Service) CLI
-version : 0.0.6
-changelog : Update to 0.0.6
+version : 1.0.0
+changelog : Update to 1.0.0
 url : https://github.com/greymd/ewscli
 author: Yasuhiro Yamada
 email : yamadagrep@gmail.com
