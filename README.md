@@ -10,11 +10,25 @@ Simple CLI client for Microsoft Exchange Web Service powered by [ews-java-api](h
 $ brew install greymd/tools/ewscli
 ```
 
+Uninstall
+
+```
+$ brew uninstall ewscli
+$ rm -rf ~/.config/ewscli/
+```
+
 ## Ubuntu
 
 ```
 $ wget https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli-1.0.0-x86_64-linux.deb
 $ sudo dpkg -i ewscli-*
+```
+
+Uninstall
+
+```
+$ sudo apt remove ewscli
+$ rm -rf ~/.config/ewscli/
 ```
 
 ## RHEL / CentOS
@@ -23,11 +37,21 @@ $ sudo dpkg -i ewscli-*
 $ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli-1.0.0-x86_64-linux.rpm
 ```
 
+Uninstall
+
+```
+$ sudo yum remove ewscli
+$ rm -rf ~/.config/ewscli/
+```
+
 ## Windows
 
 Install this executable file.
 
 https://github.com/greymd/ewscli/releases/download/v1.0.0/ewscli_installer-1.0.0-x86_64-windows.exe
+
+Uninstall:
+Remove ewscli application with general way (i.e Uninstall through Control Panel).
 
 # Getting started
 
@@ -40,6 +64,7 @@ Password:
 Password Again:
 Credential is stored in macOS Keychain
 Configure is stored in /Users/user/.config/ewscli/config
+exchange.example.com is not trusted by ewscli on JVM. Trust it ? [y/n]: y
 
 ## List folders
 $ ewscli mail describe-folders | jq -r .displayName
