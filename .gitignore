@@ -16,3 +16,4 @@ package/windows/conf/
 package/windows/legal/
 package/windows/release
 Output/
+package/unix/lib/

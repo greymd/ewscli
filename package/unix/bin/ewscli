@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -u
 
 ##############################################################################
 ##
@@ -14,12 +13,12 @@ save () {
 }
 
 warn () {
-    echo "$*"
+    echo "$*" >&2
 }
 
 die () {
     echo
-    echo "$*"
+    echo "$*" >&2
     echo
     exit 1
 }
@@ -28,17 +27,21 @@ die () {
 # Resolve links: $0 may be a link
 THIS_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_NAME="ewscli"
+# Follow "XDG Base Directory" in *NIX
 APP_LOCAL="$HOME/.config/$APP_NAME"
 SAVED="$(pwd)"
-if ! cd "$APP_LOCAL" >/dev/null ;then
+if [ ! -e "$APP_LOCAL/bin/java" ] || [ ! -d "$APP_LOCAL" ] ;then
+  printf "%s" "$APP_NAME: Initialize the $APP_NAME (Creating $APP_LOCAL) ..." >&2
   mkdir -p "$APP_LOCAL"
   LOCAL_FILES=$(find -L "$THIS_DIR/../lib/$APP_NAME/" -maxdepth 1 -mindepth 1 2>/dev/null)
   for f in $LOCAL_FILES ; do
     cp -rf "$f" "$APP_LOCAL"
   done
   cd "$APP_LOCAL" || die "$APP_NAME: Failed to change directory to $APP_LOCAL"
+  printf "%s\n" "[DONE]" >&2
 fi
-APP_HOME="$(pwd -P)"
+APP_HOME="$APP_LOCAL"
+cd "$APP_HOME" || die "$APP_NAME: Failed to change directory to $APP_HOME"
 cd "$SAVED" || die "$APP_NAME: Failed to change directory to $SAVED"
 
 # Add default JVM options here. You can also use JAVA_OPTS and EWSCLI_OPTS to pass JVM options to this script.

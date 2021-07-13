@@ -62,7 +62,7 @@ public class CertificateImporter {
     }
 
     public static void registerCertificateKeytool (byte[] cert, String alias) {
-        String jvm_root = System.getProperties().getProperty("java.home");;
+        String jvm_root = System.getProperties().getProperty("java.home");
         String cacerts_location = jvm_root + File.separator + "lib" + File.separator + "security" + File.separator + "cacerts";
         String keytool_location;
 

@@ -42,7 +42,7 @@ public class ConfigIOLogic {
             System.err.println("ewscli: [Error] Console is not available.");
             System.exit(1);
         }
-        var yes_or_no = showInputPrompt(url.getHost() + " is not trusted by ewscli on JVM. Trust it ? [y/n]", console, false);
+        var yes_or_no = showInputPrompt(url.getHost() + " is not trusted by JVM. Trust it ? [y/n]", console, false);
         // Disabling validation and create pem file
         if (yes_or_no.equals("y") || yes_or_no.equals("yes")) {
             var cert = CertificateImporter.getRootX509Certificate(url);
