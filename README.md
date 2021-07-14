@@ -20,7 +20,7 @@ $ rm -rf ~/.config/ewscli/
 ## Ubuntu
 
 ```
-$ wget https://github.com/greymd/ewscli/releases/download/v1.0.1/ewscli-1.0.1-x86_64-linux.deb
+$ wget https://github.com/greymd/ewscli/releases/download/v1.0.2/ewscli-1.0.2-x86_64-linux.deb
 $ sudo dpkg -i ewscli-*
 ```
 
@@ -34,7 +34,7 @@ $ rm -rf ~/.config/ewscli/
 ## RHEL / CentOS
 
 ```
-$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.1/ewscli-1.0.1-x86_64-linux.rpm
+$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.2/ewscli-1.0.2-x86_64-linux.rpm
 ```
 
 Uninstall
@@ -48,7 +48,7 @@ $ rm -rf ~/.config/ewscli/
 
 Install this executable file.
 
-https://github.com/greymd/ewscli/releases/download/v1.0.1/ewscli_installer-1.0.1-x86_64-windows.exe
+https://github.com/greymd/ewscli/releases/download/v1.0.2/ewscli_installer-1.0.2-x86_64-windows.exe
 
 Uninstall:
 Remove ewscli application with general way (i.e Uninstall through Control Panel).
