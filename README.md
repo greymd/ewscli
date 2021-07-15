@@ -6,11 +6,13 @@ Simple CLI client for Microsoft Exchange Web Service powered by [ews-java-api](h
 
 ## macOS
 
+Install:
+
 ```
 $ brew install greymd/tools/ewscli
 ```
 
-Uninstall
+Uninstall:
 
 ```
 $ brew uninstall ewscli
@@ -19,12 +21,14 @@ $ rm -rf ~/.config/ewscli/
 
 ## Ubuntu
 
+Install:
+
 ```
 $ wget https://github.com/greymd/ewscli/releases/download/v1.0.2/ewscli-1.0.2-x86_64-linux.deb
 $ sudo dpkg -i ewscli-*
 ```
 
-Uninstall
+Uninstall:
 
 ```
 $ sudo apt remove ewscli
@@ -33,11 +37,13 @@ $ rm -rf ~/.config/ewscli/
 
 ## RHEL / CentOS
 
+Install:
+
 ```
 $ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.2/ewscli-1.0.2-x86_64-linux.rpm
 ```
 
-Uninstall
+Uninstall:
 
 ```
 $ sudo yum remove ewscli
@@ -46,18 +52,20 @@ $ rm -rf ~/.config/ewscli/
 
 ## Windows
 
-Install this executable file.
+Install:
 
+Execute this executable file.
 https://github.com/greymd/ewscli/releases/download/v1.0.2/ewscli_installer-1.0.2-x86_64-windows.exe
 
 Uninstall:
+
 Remove ewscli application with general way (i.e Uninstall through Control Panel).
 
 # Getting started
 
 ```
 ## Set endopoint, username and password
-$ sudo ewscli configure
+$ ewscli configure
 EWS endpoint (i.e https://example.com/EWS/exchange.asmx): https://exchange.example.com/EWS/exchange.asmx
 Username: username
 Password:
