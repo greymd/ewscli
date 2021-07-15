@@ -2,7 +2,7 @@
 #define MyAppName "ewscli"
 #define MyAppVersion "1.0.5"
 #define MyAppPublisher "Yasuhiro Yamada"
-#define MyAppURL "https://gr3.ie"
+#define MyAppURL "https://github.com/greymd/ewscli"
 #define MyAppExeName "ewscli.cmd"
 
 [Setup]
