@@ -31,11 +31,6 @@ APP_NAME="ewscli"
 APP_LOCAL="$HOME/.config/$APP_NAME"
 SAVED="$(pwd)"
 
-if [ ! -d "$APP_LOCAL" ] ;then
-  mkdir -p "$APP_LOCAL"
-  cd "$APP_LOCAL" || die "$APP_NAME:[ERROR] Failed to create the directory $APP_LOCAL"
-fi
-
 # Need this for relative symlinks.
 while [ -h "$PRG" ] ; do
     ls=$(ls -ld "$PRG")
@@ -48,13 +43,22 @@ while [ -h "$PRG" ] ; do
 done
 cd "$(dirname "$PRG")/../" >/dev/null || die "$APP_NAME:[ERROR] Check directory"
 APP_HOME="$(pwd -P)"
-cd "$SAVED" >/dev/null || die "$APP_NAME:[ERROR] Check directory"
 
 # Add default JVM options here. You can also use JAVA_OPTS and EWSCLI_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS=""
+DEFAULT_JVM_OPTS="-Djavax.net.ssl.trustStore=$APP_LOCAL/cacerts"
 JAVA_HOME="$APP_HOME/lib/$APP_NAME"
 CLASSPATH="$JAVA_HOME/lib/*"
 JAVACMD="$JAVA_HOME/bin/java"
+
+if [ ! -d "$APP_LOCAL" ] ;then
+  mkdir -p "$APP_LOCAL"
+  cd "$APP_LOCAL" || die "$APP_NAME:[ERROR] Failed to create the directory $APP_LOCAL"
+fi
+if [ ! -e "$APP_LOCAL/cacerts" ] ;then
+  cp "$JAVA_HOME/lib/security/cacerts" "$APP_LOCAL/cacerts"
+fi
+
+cd "$SAVED" >/dev/null || die "$APP_NAME:[ERROR] Check directory"
 
 APP_ARGS=$(save ${1+"$@"})
 
