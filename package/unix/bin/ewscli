@@ -55,7 +55,7 @@ if [ ! -d "$APP_LOCAL" ] ;then
   cd "$APP_LOCAL" || die "$APP_NAME:[ERROR] Failed to create the directory $APP_LOCAL"
 fi
 if [ ! -e "$APP_LOCAL/cacerts" ] ;then
-  cp "$JAVA_HOME/lib/security/cacerts" "$APP_LOCAL/cacerts"
+  cp "$JAVA_HOME/lib/security/cacerts" "$APP_LOCAL/cacerts" || die "$APP_NAME:[ERROR] failed to create $APP_LOCAL/cacerts"
 fi
 
 cd "$SAVED" >/dev/null || die "$APP_NAME:[ERROR] Check directory"
@@ -65,10 +65,5 @@ APP_ARGS=$(save ${1+"$@"})
 # Collect all arguments for the java command, following the shell quoting and substitution rules
 # shellcheck disable=SC2086
 eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $EWSCLI_OPTS -classpath "\"$CLASSPATH\"" "$APP_NAME.Main" "$APP_ARGS"
-
-# by default we should be in the correct project dir, but when run from Finder on Mac, the cwd is wrong
-if [ "$(uname)" = "Darwin" ] && [ "$HOME" = "$PWD" ]; then
-  cd "$(dirname "$0")" || die "$APP_NAME: : Failed to change directory to $(dirname "$0")"
-fi
 
 exec "$JAVACMD" ${1+"$@"}
