@@ -8,7 +8,7 @@ import picocli.CommandLine.Spec;
 
 @CommandLine.Command(name = DefaultParams.APPNAME,
         mixinStandardHelpOptions = true,
-        version = "1.0.4",
+        version = "1.0.5",
         subcommands = {
                 GeneralCommand.class,
                 MailCommand.class,
