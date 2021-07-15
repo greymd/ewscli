@@ -56,6 +56,7 @@ if [ ! -d "$APP_LOCAL" ] ;then
 fi
 if [ ! -e "$APP_LOCAL/cacerts" ] ;then
   cp "$JAVA_HOME/lib/security/cacerts" "$APP_LOCAL/cacerts" || die "$APP_NAME:[ERROR] failed to create $APP_LOCAL/cacerts"
+  chmod 644 "$APP_LOCAL/cacerts"
 fi
 
 cd "$SAVED" >/dev/null || die "$APP_NAME:[ERROR] Check directory"
