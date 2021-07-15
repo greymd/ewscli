@@ -36,13 +36,10 @@ Source: "package\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdi
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
-[Tasks]
-Name: envPath; Description: "Add to PATH variable"
-
 [Code]
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
-    if (CurStep = ssPostInstall) and IsTaskSelected('envPath')
+    if (CurStep = ssPostInstall)
     then EnvAddPath(ExpandConstant('{app}') +'\exe');
 end;
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
