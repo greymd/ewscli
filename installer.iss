@@ -1,6 +1,6 @@
 #include "installer_environment.iss"
 #define MyAppName "ewscli"
-#define MyAppVersion "1.0.2"
+#define MyAppVersion "1.0.3"
 #define MyAppPublisher "Yasuhiro Yamada"
 #define MyAppURL "https://gr3.ie"
 #define MyAppExeName "ewscli.cmd"
