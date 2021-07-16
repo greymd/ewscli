@@ -2,6 +2,61 @@
 
 Simple CLI client for Microsoft Exchange Web Service powered by [ews-java-api](https://github.com/OfficeDev/ews-java-api).
 
+## TL;DR
+
+#### List folders
+
+```
+$ ewscli mail describe-folders | jq -r .displayName
+Inbox
+folderA
+folderB
+folderC
+︙
+```
+
+#### List top mails in Inbox
+
+```
+$ ewscli mail describe-mails --folder-name Inbox --max 10 | jq -r .subject
+Hello1
+Test mail
+︙
+```
+
+#### Send mail
+
+```
+$ ewscli mail create-mail --to=user@example.com --subject="Hello" --body="<b>IMPORTANT NOTIFICATIONM</b><br>Hello ..."
+```
+
+#### Get all the mails sent from user today
+
+```
+$ ewscli mail describe-mails --folder-name="Inbox" --query 'From:user@example.com AND Received:today' | jq -r .subject
+Hello from user
+︙
+```
+
+See how to write [query string](https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/querystring-querystringtype).
+
+#### Delete all mails under the folder
+
+```
+$ ewscli mail delete-mails --folder-name="Folder1" --mode=soft
+$ ewscli mail delete-mails --folder-name="Deleted Items" --mode=soft
+```
+
+#### Monitor new incoming mails under Inbox and do something
+
+```bash
+#!/bin/sh
+while read -r json;
+do
+  doSomething "$json"
+done < <(ewscli mail monitor-folders --folder-name "Inbox")
+```
+
 # Install
 
 ## macOS
@@ -24,7 +79,7 @@ $ rm -rf ~/.config/ewscli/
 Install:
 
 ```
-$ wget https://github.com/greymd/ewscli/releases/download/v1.0.5/ewscli-1.0.5-x86_64-linux.deb
+$ wget https://github.com/greymd/ewscli/releases/download/v1.0.6/ewscli-1.0.6-x86_64-linux.deb
 $ sudo dpkg -i ewscli-*
 ```
 
@@ -40,7 +95,7 @@ $ rm -rf ~/.config/ewscli/
 Install:
 
 ```
-$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.5/ewscli-1.0.5-x86_64-linux.rpm
+$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.6/ewscli-1.0.6-x86_64-linux.rpm
 ```
 
 Uninstall:
@@ -55,7 +110,7 @@ $ rm -rf ~/.config/ewscli/
 Install:
 
 Execute this executable file.
-https://github.com/greymd/ewscli/releases/download/v1.0.5/ewscli_installer-1.0.5-x86_64-windows.exe
+https://github.com/greymd/ewscli/releases/download/v1.0.6/ewscli_installer-1.0.6-x86_64-windows.exe
 
 Uninstall:
 
@@ -63,8 +118,9 @@ Remove ewscli application with general way (i.e Uninstall through Control Panel)
 
 # Getting started
 
+First of all, register the endpoint of EWS, username and password (type twice).
+
 ```
-## Set endopoint, username and password
 $ ewscli configure
 EWS endpoint (i.e https://example.com/EWS/exchange.asmx): https://exchange.example.com/EWS/exchange.asmx
 Username: username
@@ -73,18 +129,18 @@ Password Again:
 Credential is stored in macOS Keychain
 Configure is stored in /Users/user/.config/ewscli/config
 exchange.example.com is not trusted by ewscli on JVM. Trust it ? [y/n]: y
+```
 
-## List folders
+Given credential will be stored on the shown file.
+Please be careful that the password is also stored without encryption if the platform is Linux or Window (KeyRing will be used in macOS).
+
+After that, the command will work!
+
+```
 $ ewscli mail describe-folders | jq -r .displayName
 Inbox
 folderA
 folderB
 folderC
-...
-
-## List top mails in Inbox
-$ ewscli mail describe-mails --folder-name Inbox --max 10 | jq .subject
-"Hello1"
-"Test mail"
-...
+︙
 ```
