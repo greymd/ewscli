@@ -5,6 +5,7 @@ import ewscli.subcommands.GeneralCommand;
 import ewscli.subcommands.MailCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Spec;
+import picocli.CommandLine.Help;
 
 @CommandLine.Command(name = DefaultParams.APPNAME,
         mixinStandardHelpOptions = true,
@@ -29,6 +30,6 @@ public class Main implements Runnable {
     }
 
     public static void main(String[] args) {
-        System.exit(new CommandLine(new Main()).execute(args));
+        System.exit(new CommandLine(new Main()).setColorScheme(Help.defaultColorScheme(Help.Ansi.OFF)).execute(args));
     }
 }
