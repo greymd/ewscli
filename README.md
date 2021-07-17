@@ -144,3 +144,32 @@ folderB
 folderC
 ︙
 ```
+
+
+# For Developer
+
+## How to build jar
+
+```
+$ gradle -x test build
+$ java -jar build/libs/ewscli.jar --help
+Usage: ewscli [-hV] [COMMAND]
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+Commands:
+  general
+  mail
+  configure  Initialize credentials
+```
+
+## How to build runime
+
+```
+$ ./gradlew runtime
+```
+
+Directory under `./build/image` includes all the portable executive files.
+
+## How to edit the project
+
+Clone this repository and just open the project with [IntellJ IDEA](https://www.jetbrains.com/idea/).
