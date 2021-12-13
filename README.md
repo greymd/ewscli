@@ -79,7 +79,7 @@ $ rm -rf ~/.config/ewscli/
 Install:
 
 ```
-$ wget https://github.com/greymd/ewscli/releases/download/v1.0.7/ewscli-1.0.7-x86_64-linux.deb
+$ wget https://github.com/greymd/ewscli/releases/download/v1.0.8/ewscli-1.0.8-x86_64-linux.deb
 $ sudo dpkg -i ewscli-*
 ```
 
@@ -95,7 +95,7 @@ $ rm -rf ~/.config/ewscli/
 Install:
 
 ```
-$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.7/ewscli-1.0.7-x86_64-linux.rpm
+$ sudo yum install https://github.com/greymd/ewscli/releases/download/v1.0.8/ewscli-1.0.8-x86_64-linux.rpm
 ```
 
 Uninstall:
@@ -110,7 +110,7 @@ $ rm -rf ~/.config/ewscli/
 Install:
 
 Execute this executable file.
-https://github.com/greymd/ewscli/releases/download/v1.0.7/ewscli_installer-1.0.7-x86_64-windows.exe
+https://github.com/greymd/ewscli/releases/download/v1.0.8/ewscli_installer-1.0.8-x86_64-windows.exe
 
 Uninstall:
 
