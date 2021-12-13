@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'groovy'
     id 'org.beryx.runtime' version '1.8.0'
+    id "org.owasp.dependencycheck" version "6.5.0.1"
 }
 
 repositories {
@@ -10,11 +11,11 @@ repositories {
 }
 
 dependencies {
-    compile 'com.microsoft.ews-java-api:ews-java-api:2.0'
-    compile 'javax.xml.ws:jaxws-api:2.3.1'
-    compile 'info.picocli:picocli:4.1.4'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
-    compile 'net.east301:java-keyring:1.0.0'
+    implementation 'com.microsoft.ews-java-api:ews-java-api:2.0'
+    implementation 'javax.xml.ws:jaxws-api:2.3.1'
+    implementation 'info.picocli:picocli:4.1.4'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+    implementation 'net.east301:java-keyring:1.0.0'
 
     testImplementation 'junit:junit:4.12'
 }
